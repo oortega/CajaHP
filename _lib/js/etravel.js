@@ -1,4 +1,5 @@
- jQuery(document).ready(function() {
+(function ($) {
+ $(document).ready(function() {
 
      CambiaPestanas('.etWContainer .etWtabs a', 'active', '.etWContainer .etWforms .form');
      //Configuraciones generales para los calendarios
@@ -15,7 +16,7 @@
              afterShow.apply((inst.input ? inst.input[0] : null)); // trigger custom callback
      }
 
-     jQuery(".EtDateFromGN").datepicker({
+     $(".EtDateFromGN").datepicker({
          dateFormat: FormatO,
          numberOfMonths: 2,
          showButtonPanel: true,
@@ -28,7 +29,7 @@
          onClose: showNextCalendar,
          onSelect: OnSelectDate
      });
-     jQuery(".EtDateToGN").datepicker({
+     $(".EtDateToGN").datepicker({
          dateFormat: FormatO,
          numberOfMonths: 2,
          showButtonPanel: true,
@@ -37,7 +38,7 @@
          beforeShowDay: RangoDias,
          afterShow: NumeroNoches,
          beforeShow: function() {
-             var form = jQuery(this).parents("form");
+             var form = $(this).parents("form");
              var fromDate = form.find(".EtDateFromGN").datepicker("getDate");
              return {
                  "maxDate": addDate(fromDate, eTMaxDays, 'd')
@@ -48,10 +49,10 @@
      DefaultDate();
 
      //Muestra numero de noches
-     jQuery("body").on("mouseenter", "#ui-datepicker-div td a", NumeroNochesHover);
-     jQuery("body").on("mouseleave", "#ui-datepicker-div td a", function() {
+     $("body").on("mouseenter", "#ui-datepicker-div td a", NumeroNochesHover);
+     $("body").on("mouseleave", "#ui-datepicker-div td a", function() {
          
-             jQuery(".Noches").text(noches + " " + Nighttext);
+             $(".Noches").text(noches + " " + Nighttext);
 
      });
 
@@ -59,14 +60,14 @@
      ResetAll();
 
      // Pasa el valor del select al span
-     jQuery(".etWContainer").find(".etWSelect select").change(function() {
-         jQuery(this).next("span").text(jQuery(this).find("option:selected").text());
+     $(".etWContainer").find(".etWSelect select").change(function() {
+         $(this).next("span").text($(this).find("option:selected").text());
      }).change(); // para que lo ejecute cuando se cargue la pagina
 
 
      // Config de form hoteles
      if ($("#formahotel").length === 1) {
-         jQuery('#formahotel').submit(function(e) {
+         $('#formahotel').submit(function(e) {
              var v1 = ValidateHotel('formahotel', 'EtDestinyHtl', MsjDestinO, AltMsjDestinO);
              if (v1) {
                  cleanSubmit(this);
@@ -83,46 +84,46 @@
 
 
          });
-         jQuery("#formahotel .EtDateFromGN").datepicker("option", "maxDate", "+18m");
+         $("#formahotel .EtDateFromGN").datepicker("option", "maxDate", "+18m");
 
 
          changeFocus("#EtDestinyHtl", MsjDestinO);
 
-         jQuery("#formahotel .rm select").change(function() {
+         $("#formahotel .rm select").change(function() {
              changeRoom('#formahotel', '')
          });
-         jQuery("#Room1 select[name=ch1]").change(function() {
+         $("#Room1 select[name=ch1]").change(function() {
              setAgeC(1, '')
          });
-         jQuery("#Age1 select").change(function() {
+         $("#Age1 select").change(function() {
              setAgeCI('', 1)
          });
-         jQuery("#Room2 select[name=ch2]").change(function() {
+         $("#Room2 select[name=ch2]").change(function() {
              setAgeC(2, '')
          });
-         jQuery("#Age2 select").change(function() {
+         $("#Age2 select").change(function() {
              setAgeCI('', 2)
          });
-         jQuery("#Room3 select[name=ch3]").change(function() {
+         $("#Room3 select[name=ch3]").change(function() {
              setAgeC(3, '')
          });
-         jQuery("#Age3 select").change(function() {
+         $("#Age3 select").change(function() {
              setAgeCI('', 3)
          });
          //Evitar que se realize el submit en este campo de origen
-         jQuery("#EtDestinyHtl").keypress(function(e) {
+         $("#EtDestinyHtl").keypress(function(e) {
              if (e.which == 13) e.preventDefault()
          });
 
          //autocompletado Hotel
-         jQuery("#EtDestinyHtl").autocomplete({
+         $("#EtDestinyHtl").autocomplete({
              minLength: 3,
              source: function(request, response) {
                  if (request.term in cacheDH) {
                      response(cacheDH[request.term]);
                      return;
                  }
-                 jQuery.ajax({
+                 $.ajax({
                      url: "http://ajax.e-tsw.com/searchservices/getSearchJson.aspx",
                      dataType: "jsonp",
                      jsonpCallback: "ETSHotel",
@@ -146,24 +147,24 @@
              },
              select: function(event, ui) {
                  if (!ui.item.Type) {
-                     jQuery(this).val(""); // Cuando no hay resultados solo limpia la entrada
+                     $(this).val(""); // Cuando no hay resultados solo limpia la entrada
                      return false;
                  }
 
-                 jQuery("#Etdt").val(ui.item.TypeID);
+                 $("#Etdt").val(ui.item.TypeID);
                 if (ui.item.Type == "H") {
-                     jQuery("#formahotel").attr('action', 'http://www.e-tsw.com.mx/Hoteles/Tarifas');
-                     jQuery("#Etdt").attr("name","ht");
+                     $("#formahotel").attr('action', 'http://www.e-tsw.com.mx/Hoteles/Tarifas');
+                     $("#Etdt").attr("name","ht");
                  } else {
-                     jQuery("#formahotel").attr('action', 'http://www.e-tsw.com.mx/Hoteles/Lista');
-                     jQuery("#Etdt").attr("name","ds");
+                     $("#formahotel").attr('action', 'http://www.e-tsw.com.mx/Hoteles/Lista');
+                     $("#Etdt").attr("name","ds");
                  }
-                 jQuery("#EtCt").val(ui.item.Country);
-                 jQuery("#formahotel .EtDateFromGN").focus();
+                 $("#EtCt").val(ui.item.Country);
+                 $("#formahotel .EtDateFromGN").focus();
                  inputText = ui.item.Label;
-                 jQuery(this).val(ui.item.Label);
+                 $(this).val(ui.item.Label);
 
-                 jQuery("#EtDestinyHtl").blur(); //Para que se limpie el input cuando se le de click
+                 $("#EtDestinyHtl").blur(); //Para que se limpie el input cuando se le de click
                  return false;
              }
          }).data("ui-autocomplete")._renderMenu = function(ul, items) {
@@ -183,17 +184,17 @@
                  self._renderItemData(ul, item);
              });
          }
-         jQuery("#EtDestinyHtl").data("ui-autocomplete")._renderItem = function(ul, item) {
-             return jQuery("<li>")
+         $("#EtDestinyHtl").data("ui-autocomplete")._renderItem = function(ul, item) {
+             return $("<li>")
                  .data("item.autocomplete", item)
-                 .append(jQuery("<a>").text(item.Label))
+                 .append($("<a>").text(item.Label))
                  .appendTo(ul);
          }
      }
      // Config de form paquetes
      if ($("#formapackage").length === 1) {
-         jQuery("#formapackage .EtDateFromGN").datepicker("option", "maxDate", "+319d");
-         jQuery("#formapackage").submit(function(e) {
+         $("#formapackage .EtDateFromGN").datepicker("option", "maxDate", "+319d");
+         $("#formapackage").submit(function(e) {
              var v1 = ValidateFLPK('formapackage', 'ni');
              var v2 = restrictPack6People();
              if (v1 && v2) {
@@ -211,43 +212,43 @@
 
 
          });
-         jQuery("#formapackage .rm select").change(function() {
+         $("#formapackage .rm select").change(function() {
              changeRoom('#formapackage', 'Pk')
          });
-         jQuery("#RoomPk1 select[name=ch1]").change(function() {
+         $("#RoomPk1 select[name=ch1]").change(function() {
              setAgeC(1, 'Pk')
          });
-         jQuery("#AgePk1 select").change(function() {
+         $("#AgePk1 select").change(function() {
              setAgeCI('Pk', 1)
          });
-         jQuery("#RoomPk2 select[name=ch2]").change(function() {
+         $("#RoomPk2 select[name=ch2]").change(function() {
              setAgeC(2, 'Pk')
          });
-         jQuery("#AgePk2 select").change(function() {
+         $("#AgePk2 select").change(function() {
              setAgeCI('Pk', 2)
          });
-         jQuery("#RoomPk3 select[name=ch3]").change(function() {
+         $("#RoomPk3 select[name=ch3]").change(function() {
              setAgeC(3, 'Pk')
          });
-         jQuery("#AgePk3 select").change(function() {
+         $("#AgePk3 select").change(function() {
              setAgeCI('Pk', 3)
          });
          changeFocus("#EtCityOrig,#EtDestinyPkl", MsjAirport);
 
          //Evitar que se realize el submit en este campo de origen
-         jQuery("#EtCityOrig").keypress(function(e) {
+         $("#EtCityOrig").keypress(function(e) {
              if (e.which == 13) e.preventDefault()
          });
 
          //autocompletado origen paquetes
-         jQuery("#EtCityOrig").autocomplete({
+         $("#EtCityOrig").autocomplete({
              minLength: 3,
              source: function(request, response) {
                  if (request.term in cachePQ) {
                      response(cachePQ[request.term]);
                      return;
                  }
-                 jQuery.ajax({
+                 $.ajax({
                      url: "http://ajax.e-tsw.com/searchservices/getSearchJson.aspx",
                      dataType: "jsonp",
                      jsonpCallback: "ETSPaquetes",
@@ -271,36 +272,36 @@
              },
              select: function(event, ui) {
                  if (!ui.item.Type) {
-                     jQuery(this).val(""); // Cuando no hay resultados solo limpia la entrada
+                     $(this).val(""); // Cuando no hay resultados solo limpia la entrada
                      return false;
                  }
-                 jQuery("#EtCityOrig").val(ui.item.Label);
-                 jQuery("#EtIATAob").val(ui.item.TypeID);
+                 $("#EtCityOrig").val(ui.item.Label);
+                 $("#EtIATAob").val(ui.item.TypeID);
                  inputText = ui.item.Label;
-                 jQuery("#EtCityOrig").blur();//Para que se limpie el input cuando se le de click
-                 jQuery("#EtDestinyPkl").focus();
+                 $("#EtCityOrig").blur();//Para que se limpie el input cuando se le de click
+                 $("#EtDestinyPkl").focus();
                  return false;
              }
          }).data("ui-autocomplete")._renderItem = function(ul, item) {
-             return jQuery("<li>")
+             return $("<li>")
                  .data("item.autocomplete", item)
-                 .append(jQuery("<a>").text(item.Label))
+                 .append($("<a>").text(item.Label))
                  .appendTo(ul);
          };
          //Evitar que se realize el submit en este campo 
-         jQuery("#EtDestinyPkl").keypress(function(e) {
+         $("#EtDestinyPkl").keypress(function(e) {
              if (e.which == 13) e.preventDefault()
          });
 
          //autocompletado destino paquetes
-         jQuery("#EtDestinyPkl").autocomplete({
+         $("#EtDestinyPkl").autocomplete({
              minLength: 3,
              source: function(request, response) {
                  if (request.term in cacheD) {
                      response(cacheD[request.term]);
                      return;
                  }
-                 jQuery.ajax({
+                 $.ajax({
                      // Callback - JSONP
                      url: "http://ajax.e-tsw.com/searchservices/getSearchJson.aspx",
                      dataType: "jsonp",
@@ -325,31 +326,31 @@
              },
              select: function(event, ui) {
                  if (!ui.item.Type) {
-                     jQuery(this).val(""); // Cuando no hay resultados solo limpia la entrada
+                     $(this).val(""); // Cuando no hay resultados solo limpia la entrada
                      return false;
                  }
-                 jQuery("#EtDestinyPkl").val(ui.item.Label);
-                 jQuery("#EtdtPk").val(ui.item.TypeID.split("|")[1]);
-                 jQuery("#EtIATds").val(ui.item.TypeID.split("|")[0]);
+                 $("#EtDestinyPkl").val(ui.item.Label);
+                 $("#EtdtPk").val(ui.item.TypeID.split("|")[1]);
+                 $("#EtIATds").val(ui.item.TypeID.split("|")[0]);
                  inputText = ui.item.Label;
 
-                 jQuery("#EtDestinyPkl").blur();//Para que se limpie el input cuando se le de click
+                 $("#EtDestinyPkl").blur();//Para que se limpie el input cuando se le de click
 
-                 jQuery("#formapackage .EtDateFromGN").focus();
+                 $("#formapackage .EtDateFromGN").focus();
                  return false;
              }
          }).data("ui-autocomplete")._renderItem = function(ul, item) {
-             return jQuery("<li>")
+             return $("<li>")
                  .data("item.autocomplete", item)
-                 .append(jQuery("<a>").text(item.Label))
+                 .append($("<a>").text(item.Label))
                  .appendTo(ul);
          };
 
      }
      
      //Se activan estos inputs al salir de la pagina
-     jQuery(window).unload(function() {
-         jQuery(".etWContainer").find("[name*=ad],[name*=ac],[name*=ch]").prop("disabled", false)
+     $(window).unload(function() {
+         $(".etWContainer").find("[name*=ad],[name*=ac],[name*=ch]").prop("disabled", false)
      });
      //Modificar el foco
 
@@ -362,7 +363,7 @@
  /*Funciones para los calendarios*/
 
  function DefVar(obj) {
-     if (jQuery(obj + " input[name=ln]").val().toUpperCase() == "ESP") {
+     if ($(obj + " input[name=ln]").val().toUpperCase() == "ESP") {
          MsjDestinO = "Especifique una ciudad";
          AltMsjDestinO = "Por favor especifique una ciudad";
          MsjAirport = "Escriba el nombre de la ciudad";
@@ -384,7 +385,7 @@
          msgSelectedFrom = "Día de ida";
          msgSelectedTo = "Día de regreso";
      }
-     if (jQuery(obj + " input[name=ln]").val().toUpperCase() == "POR") {
+     if ($(obj + " input[name=ln]").val().toUpperCase() == "POR") {
          MsjDestinO = "Introduza uma cidade";
          AltMsjDestinO = "Por favor introduza uma cidade";
          MsjAirport = "Cidade ou Aeroporto";
@@ -408,7 +409,7 @@
          msgSelectedTo = "Volta";
 
      }
-     if (jQuery(obj + " input[name=ln]").val().toUpperCase() == "ING") {
+     if ($(obj + " input[name=ln]").val().toUpperCase() == "ING") {
          MsjDestinO = "Enter a city";
          AltMsjDestinO = "Please enter a city";
          MsjAirport = "Enter the name of the city";
@@ -441,42 +442,42 @@
  }
  // Funcion para sumar Fechas
 
- function addDate(date, amount, period) {
-     date = new Date(date);
-     if (period == 'd' || period == 'w') {
-         this._normaliseDate(date);
-         date.setDate(date.getDate() + amount * (period == 'w' ? 7 : 1));
-     } else {
-         var year = date.getFullYear() + (period == 'y' ? amount : 0);
-         var month = date.getMonth() + (period == 'm' ? amount : 0);
-         date.setTime(plugin.newDate(year, month + 1,
-             Math.min(date.getDate(), this.daysInMonth(year, month + 1))).getTime());
-     }
-     return date;
- }
+  function addDate(date, amount, period) {
+        date = new Date(date);
+        if (period == 'd' || period == 'w') {
+            _normaliseDate(date);
+            date.setDate(date.getDate() + amount * (period == 'w' ? 7 : 1));
+        } else {
+            var year = date.getFullYear() + (period == 'y' ? amount : 0);
+            var month = date.getMonth() + (period == 'm' ? amount : 0);
+            date.setTime(plugin.newDate(year, month + 1,
+                Math.min(date.getDate(), this.daysInMonth(year, month + 1))).getTime());
+        }
+        return date;
+    }
 
  function DefaultDate() {
 
      //Fechas Default en Calendarios
      var defaultDate = new Date(); // Obtiene la fecha 
      defaultDate = addDate(defaultDate, '+7', 'd'); // Le suma 7 días
-     jQuery(".EtDateFromGN").datepicker("setDate", defaultDate);
+     $(".EtDateFromGN").datepicker("setDate", defaultDate);
      defaultDate = addDate(defaultDate, '+4', 'd'); // Le suma 4 días
-     jQuery(".EtDateToGN").datepicker("setDate", defaultDate);
+     $(".EtDateToGN").datepicker("setDate", defaultDate);
  }
 
  //Suma o resta fechas segun al calendario que se le da click
 
  function OnSelectDate(dateSel) {
-     var formId = jQuery(this).parents("form").attr('id');
-     var dtClass = jQuery(this).attr('class');
-     var dateFromInput = jQuery("#" + formId + " .EtDateFromGN");
-     var dateToInput = jQuery("#" + formId + " .EtDateToGN");
+     var formId = $(this).parents("form").attr('id');
+     var dtClass = $(this).attr('class');
+     var dateFromInput = $("#" + formId + " .EtDateFromGN");
+     var dateToInput = $("#" + formId + " .EtDateToGN");
      var newdate, dateFrom, dateTo;
 
      //ESTA SECCIÓN IDENTIFICA A QUE CALENDARIO SE LE DA CLICK
      if (dtClass.indexOf('EtDateFromGN') >= 0) {
-         dateFrom = jQuery(this).datepicker("getDate");
+         dateFrom = $(this).datepicker("getDate");
          dateTo = dateToInput.datepicker("getDate");
          var daysDiff = Math.round((dateTo - dateFrom) / 864e5);
          newdate = addDate(dateFrom, '+1', 'd'); //Nueva fecha para el input EtDateToGN
@@ -488,7 +489,7 @@
         
      } else {
          dateFrom = dateFromInput.datepicker("getDate");
-         dateTo = jQuery(this).datepicker("getDate");
+         dateTo = $(this).datepicker("getDate");
          newdate = addDate(dateTo, '-1', 'd'); //Nueva fecha para el input EtDateFromGN
          if ( dateTo <= dateFrom) {
              dateFromInput.datepicker("setDate", newdate);
@@ -508,9 +509,9 @@
  function RangoDias(date) {
      var clase = "";
      var titulo = "";
-     var forma = jQuery(this).parents("form").attr('id');
-     var inicio = jQuery('#' + forma + ' .EtDateFromGN').datepicker("getDate");
-     var fin = jQuery('#' + forma + ' .EtDateToGN').datepicker("getDate");
+     var forma = $(this).parents("form").attr('id');
+     var inicio = $('#' + forma + ' .EtDateFromGN').datepicker("getDate");
+     var fin = $('#' + forma + ' .EtDateToGN').datepicker("getDate");
      //Se convierte todo a milisegundos
      date = date.getTime();
      inicio = inicio.getTime();
@@ -535,15 +536,15 @@
  //Muestra numero de noches de las fechas seleccionadas
 
  function NumeroNoches(date) {
-     jQuery(".Noches").remove();
+     $(".Noches").remove();
 
-     var Formanoches = jQuery(this).parents("form").attr('id');
-         var fin = jQuery('#' + Formanoches + ' .EtDateToGN').datepicker("getDate").getTime();
-         inicionoches = jQuery('#' + Formanoches + ' .EtDateFromGN').datepicker("getDate").getTime();
+     var Formanoches = $(this).parents("form").attr('id');
+         var fin = $('#' + Formanoches + ' .EtDateToGN').datepicker("getDate").getTime();
+         inicionoches = $('#' + Formanoches + ' .EtDateFromGN').datepicker("getDate").getTime();
 
          noches = Math.round((fin - inicionoches) / 864e5);
 
-         jQuery(".ui-datepicker-close").before("<span class='Noches' >" + noches + " " + Nighttext + "</span>");
+         $(".ui-datepicker-close").before("<span class='Noches' >" + noches + " " + Nighttext + "</span>");
 
      /* Inicia Fix para la navegación de los meses */
 
@@ -567,12 +568,12 @@
          if (fechahover > 0) {
              $(".Noches").text(fechahover + " " + Nighttext);
          } else {
-             jQuery(".Noches").text(noches + " " + Nighttext);
+             $(".Noches").text(noches + " " + Nighttext);
          }
  }
 
  function ValidateDate(forma) {
-     if (jQuery('#' + forma + ' .EtDateFromGN').val() == "" || jQuery('#' + forma + ' .EtDateToGN').val() == "") {
+     if ($('#' + forma + ' .EtDateFromGN').val() == "" || $('#' + forma + ' .EtDateToGN').val() == "") {
          alert(altMsjDate);
          return (false);
      }
@@ -584,11 +585,11 @@
  //Función de cambio de pestaña
 
  function CambiaPestanas(objeto, clase, contenedores) {
-     jQuery(objeto).click(function() {
-         jQuery(objeto).removeClass(clase);
-         jQuery(this).addClass(clase);
-         jQuery(contenedores).hide();
-         var contenedor = jQuery(contenedores + ":nth-child(" + (jQuery(this).index() + 1) + ")");
+     $(objeto).click(function() {
+         $(objeto).removeClass(clase);
+         $(this).addClass(clase);
+         $(contenedores).hide();
+         var contenedor = $(contenedores + ":nth-child(" + ($(this).index() + 1) + ")");
          contenedor.show();
          /* Inicia Fix Bug IE  */
          contenedor.attr("class", contenedor.attr("class"));
@@ -615,56 +616,56 @@
  //Modificar el foco
 
  function changeFocus(obj, text) {
-     jQuery(obj).focus(function() {
+     $(obj).focus(function() {
          inputText = $(this).val();
-         jQuery(this).val("");
-         jQuery(this).autocomplete("search", "");
+         $(this).val("");
+         $(this).autocomplete("search", "");
      });
-     jQuery(obj).blur(function() {
-         jQuery(this).val(inputText);
+     $(obj).blur(function() {
+         $(this).val(inputText);
      });
  }
 
  //reinicia edad de los niños
 
  function restarAge(cuarto, suf) {
-     jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val(0).change();
-     jQuery("#Age" + suf + cuarto).hide();
-     jQuery("#Age" + suf + cuarto + ' .age-select select').val(0).change();
-     jQuery("#Et" + suf + "NumAges" + cuarto).val("");
+     $("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val(0).change();
+     $("#Age" + suf + cuarto).hide();
+     $("#Age" + suf + cuarto + ' .age-select select').val(0).change();
+     $("#Et" + suf + "NumAges" + cuarto).val("");
      if (!(
-         (jQuery("#Room" + suf + '1 select[name=ch1]').length != 0 && jQuery("#Room" + suf + '1 select[name=ch1]').val() != 0) ||
-         (jQuery("#Room" + suf + '2 select[name=ch2]').length != 0 && jQuery("#Room" + suf + '2 select[name=ch2]').val() != 0) ||
-         (jQuery("#Room" + suf + '3 select[name=ch3]').length != 0 && jQuery("#Room" + suf + '3 select[name=ch3]').val() != 0)
+         ($("#Room" + suf + '1 select[name=ch1]').length != 0 && $("#Room" + suf + '1 select[name=ch1]').val() != 0) ||
+         ($("#Room" + suf + '2 select[name=ch2]').length != 0 && $("#Room" + suf + '2 select[name=ch2]').val() != 0) ||
+         ($("#Room" + suf + '3 select[name=ch3]').length != 0 && $("#Room" + suf + '3 select[name=ch3]').val() != 0)
      )) {
-         jQuery("#Age" + suf + "C").hide();
+         $("#Age" + suf + "C").hide();
      }
  }
  //Reinicia configuración de cuartos
 
  function restartRoom(forma, cuarto, suf) {
-     jQuery("#Room" + suf + cuarto).hide();
+     $("#Room" + suf + cuarto).hide();
      restarAge(cuarto, suf);
  }
  //muestra cuartos
 
  function showRoom(forma, cuarto, suf) {
-     jQuery("#Room" + suf + cuarto).show();
+     $("#Room" + suf + cuarto).show();
  }
  //Funcion cambio cuartos
 
  function changeRoom(forma, suf) {
-     if (jQuery(forma + ' .rm select').val() == 1) {
+     if ($(forma + ' .rm select').val() == 1) {
          showRoom(forma, 1, suf);
          restartRoom(forma, 2, suf);
          restartRoom(forma, 3, suf);
      }
-     if (jQuery(forma + ' .rm select').val() == 2) {
+     if ($(forma + ' .rm select').val() == 2) {
          showRoom(forma, 1, suf);
          showRoom(forma, 2, suf);
          restartRoom(forma, 3, suf);
      }
-     if (jQuery(forma + ' .rm select').val() == 3) {
+     if ($(forma + ' .rm select').val() == 3) {
          showRoom(forma, 1, suf);
          showRoom(forma, 2, suf);
          showRoom(forma, 3, suf);
@@ -674,51 +675,51 @@
 
  function setAgeC(cuarto, suf) {
      if (
-         (jQuery("#Room" + suf + '1 select[name=ch1]').length != 0 && jQuery("#Room" + suf + '1 select[name=ch1]').val() != 0) ||
-         (jQuery("#Room" + suf + '2 select[name=ch2]').length != 0 && jQuery("#Room" + suf + '2 select[name=ch2]').val() != 0) ||
-         (jQuery("#Room" + suf + '3 select[name=ch3]').length != 0 && jQuery("#Room" + suf + '3 select[name=ch3]').val() != 0)
+         ($("#Room" + suf + '1 select[name=ch1]').length != 0 && $("#Room" + suf + '1 select[name=ch1]').val() != 0) ||
+         ($("#Room" + suf + '2 select[name=ch2]').length != 0 && $("#Room" + suf + '2 select[name=ch2]').val() != 0) ||
+         ($("#Room" + suf + '3 select[name=ch3]').length != 0 && $("#Room" + suf + '3 select[name=ch3]').val() != 0)
      ) {
-         jQuery("#Age" + suf + "C").show();
+         $("#Age" + suf + "C").show();
      } else {
-         jQuery("#Age" + suf + "C").hide();
+         $("#Age" + suf + "C").hide();
      }
-     jQuery("#Age" + suf + cuarto).show();
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 0) {
-         jQuery("#Age" + suf + cuarto).hide();
-         jQuery("#Et" + suf + "NumAges" + cuarto).val('');
+     $("#Age" + suf + cuarto).show();
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 0) {
+         $("#Age" + suf + cuarto).hide();
+         $("#Et" + suf + "NumAges" + cuarto).val('');
      }
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 1) {
-         jQuery("#Age" + suf + cuarto + ' .age-select').hide();
-         jQuery("#Age" + suf + cuarto + ' .age-select select').val(0).change();
-         jQuery("#Age" + suf + cuarto + ' .ones').show();
-         jQuery("#Et" + suf + "NumAges" + cuarto).val('0');
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 1) {
+         $("#Age" + suf + cuarto + ' .age-select').hide();
+         $("#Age" + suf + cuarto + ' .age-select select').val(0).change();
+         $("#Age" + suf + cuarto + ' .ones').show();
+         $("#Et" + suf + "NumAges" + cuarto).val('0');
      }
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 2) {
-         jQuery("#Age" + suf + cuarto + ' .age-select').val(0).hide();
-         jQuery("#Age" + suf + cuarto + ' .age-select select').val(0).change();
-         jQuery("#Age" + suf + cuarto + ' .ones').show();
-         jQuery("#Age" + suf + cuarto + ' .two').show();
-         jQuery("#Et" + suf + "NumAges" + cuarto).val('0,0');
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 2) {
+         $("#Age" + suf + cuarto + ' .age-select').val(0).hide();
+         $("#Age" + suf + cuarto + ' .age-select select').val(0).change();
+         $("#Age" + suf + cuarto + ' .ones').show();
+         $("#Age" + suf + cuarto + ' .two').show();
+         $("#Et" + suf + "NumAges" + cuarto).val('0,0');
      }
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 3) {
-         jQuery("#Age" + suf + cuarto + ' .age-select').val(0).hide();
-         jQuery("#Age" + suf + cuarto + ' .age-select select').val(0).change();
-         jQuery("#Age" + suf + cuarto + ' .ones').show();
-         jQuery("#Age" + suf + cuarto + ' .two').show();
-         jQuery("#Age" + suf + cuarto + ' .three').show();
-         jQuery("#Et" + suf + "NumAges" + cuarto).val('0,0,0');
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 3) {
+         $("#Age" + suf + cuarto + ' .age-select').val(0).hide();
+         $("#Age" + suf + cuarto + ' .age-select select').val(0).change();
+         $("#Age" + suf + cuarto + ' .ones').show();
+         $("#Age" + suf + cuarto + ' .two').show();
+         $("#Age" + suf + cuarto + ' .three').show();
+         $("#Et" + suf + "NumAges" + cuarto).val('0,0,0');
      }
  }
 
  function setAgeCI(suf, cuarto) {
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 1) {
-         jQuery("#Et" + suf + "NumAges" + cuarto).val(jQuery('#Age' + suf + cuarto + ' .ones select').val());
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 1) {
+         $("#Et" + suf + "NumAges" + cuarto).val($('#Age' + suf + cuarto + ' .ones select').val());
      }
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 2) {
-         jQuery("#Et" + suf + "NumAges" + cuarto).val(jQuery('#Age' + suf + cuarto + ' .ones select').val() + ',' + jQuery('#Age' + suf + cuarto + ' .two select').val());
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 2) {
+         $("#Et" + suf + "NumAges" + cuarto).val($('#Age' + suf + cuarto + ' .ones select').val() + ',' + $('#Age' + suf + cuarto + ' .two select').val());
      }
-     if (jQuery("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 3) {
-         jQuery("#Et" + suf + "NumAges" + cuarto).val(jQuery('#Age' + suf + cuarto + ' .ones select').val() + ',' + jQuery('#Age' + suf + cuarto + ' .two select').val() + ',' + jQuery('#Age' + suf + cuarto + ' .three select').val());
+     if ($("#Room" + suf + cuarto + ' select[name=ch' + cuarto + ']').val() == 3) {
+         $("#Et" + suf + "NumAges" + cuarto).val($('#Age' + suf + cuarto + ' .ones select').val() + ',' + $('#Age' + suf + cuarto + ' .two select').val() + ',' + $('#Age' + suf + cuarto + ' .three select').val());
      }
  }
 
@@ -758,11 +759,11 @@ function restrictFlight6People() {
  //Validar vuelos y paquetes
 
  function ValidateFLPK(forma, objdestino) {
-     if (jQuery("#" + forma + " input[name=no]").val() == "" || jQuery("#" + forma + " input[name=no]").val() == MsjAirport) {
+     if ($("#" + forma + " input[name=no]").val() == "" || $("#" + forma + " input[name=no]").val() == MsjAirport) {
          alert(altMsjAirport);
          return (false);
      }
-     if (jQuery("#" + forma + " input[name=" + objdestino + "]").val() == "" || jQuery("#" + forma + " input[name=" + objdestino + "]").val() == MsjAirport) {
+     if ($("#" + forma + " input[name=" + objdestino + "]").val() == "" || $("#" + forma + " input[name=" + objdestino + "]").val() == MsjAirport) {
          alert(altMsjAirportr);
          return (false);
      }
@@ -774,7 +775,7 @@ function restrictFlight6People() {
  //Valida hotel
 
  function ValidateHotel(forma, objdest, msjobjdest, altmsjobjdest) {
-     if (jQuery('#' + objdest).val() == '' || jQuery('#' + objdest).val() == msjobjdest) {
+     if ($('#' + objdest).val() == '' || $('#' + objdest).val() == msjobjdest) {
          alert(altmsjobjdest);
          return (false);
      }
@@ -787,32 +788,33 @@ function restrictFlight6People() {
 
  function cleanSubmit(forma) {
      // Lee el número de habitaciones solicitadas
-     var rm = parseInt(jQuery(forma).find("[name=rm]").val());
+     var rm = parseInt($(forma).find("[name=rm]").val());
 
      // Deshabilita los adultos de las habitaciones que no se solicitaron
-     jQuery(forma).find("[name*=ad]").each(function(index, element) {
-         var room = parseInt(jQuery(this).attr("name").replace("ad", ""));
+     $(forma).find("[name*=ad]").each(function(index, element) {
+         var room = parseInt($(this).attr("name").replace("ad", ""));
          if (rm < room) {
-             jQuery(this).prop("disabled", true);
+             $(this).prop("disabled", true);
          }
      });
      // Deshabilita los niños de las habitaciones que no se solicitaron
-     jQuery(forma).find("[name*=ch]").each(function(index, element) {
-         var room = parseInt(jQuery(this).attr("name").replace("ch", ""));
+     $(forma).find("[name*=ch]").each(function(index, element) {
+         var room = parseInt($(this).attr("name").replace("ch", ""));
          if (rm < room) {
-             jQuery(this).prop("disabled", true);
+             $(this).prop("disabled", true);
          }
          // Lee la cantidad de niños para esta habitación y si es cero deshabilita sus edades
-         var ch = parseInt(jQuery(forma).find("[name=ch" + room + "]").val())
+         var ch = parseInt($(forma).find("[name=ch" + room + "]").val())
          if (ch == 0) {
-             jQuery(forma).find("[name=ac" + room + "]").prop("disabled", true)
+             $(forma).find("[name=ac" + room + "]").prop("disabled", true)
          }
      });
      // Deshabilita las edades de los niños de las habitaciones que no se solicitaron
-     jQuery(forma).find("[name*=ac]").each(function(index, element) {
-         var room = parseInt(jQuery(this).attr("name").replace("ac", ""));
+     $(forma).find("[name*=ac]").each(function(index, element) {
+         var room = parseInt($(this).attr("name").replace("ac", ""));
          if (rm < room) {
-             jQuery(this).prop("disabled", true);
+             $(this).prop("disabled", true);
          }
      });
  }
+})(jQuery);
