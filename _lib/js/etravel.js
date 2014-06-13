@@ -87,7 +87,7 @@
          $("#formahotel .EtDateFromGN").datepicker("option", "maxDate", "+18m");
 
 
-         changeFocus("#EtDestinyHtl", MsjDestinO);
+         changeFocus("#EtDestinyHtl");
 
          $("#formahotel .rm select").change(function() {
              changeRoom('#formahotel', '')
@@ -233,7 +233,7 @@
          $("#AgePk3 select").change(function() {
              setAgeCI('Pk', 3)
          });
-         changeFocus("#EtCityOrig,#EtDestinyPkl", MsjAirport);
+         changeFocus("#EtCityOrig,#EtDestinyPkl");
 
          //Evitar que se realize el submit en este campo de origen
          $("#EtCityOrig").keypress(function(e) {
@@ -615,7 +615,7 @@
  }
  //Modificar el foco
 
- function changeFocus(obj, text) {
+ function changeFocus(obj) {
      $(obj).focus(function() {
          inputText = $(this).val();
          $(this).val("");
